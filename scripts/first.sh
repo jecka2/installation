@@ -4,3 +4,5 @@
 
 2 скопировать ssh ключ
 ssh-copy-id username@remote_host
+
+3 others
