@@ -71,6 +71,10 @@ systemctl start mysql
 SQL_COMMANDS="
 CREATE USER 'jecka'@'%' IDENTIFIED BY '123qweASD!';
 GRANT ALL PRIVILEGES ON *.* TO 'jecka'@'%';
+CREATE USER 'replication'@'%' IDENTIFIED BY 'password';
+GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
+FLUSH PRIVILEGES;
+
 FLUSH PRIVILEGES;
 "
 mysql -u root -e "${SQL_COMMANDS}" 

@@ -67,23 +67,6 @@ apt-get install mysql-server git  -y
 systemctl start mysql
 
 
-SQL_COMMANDS="
-CREATE USER 'replication'@'%' IDENTIFIED BY 'password';
-GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
-FLUSH PRIVILEGES;
-SHOW MASTER STATUS;
-"
-mysql -u jecka -h 192.168.1.141 -p123qweASD! -e "${SQL_COMMANDS}"
-
-
- 
-#SQL_COMMANDS="
-#CREATE USER 'replication'@'%' IDENTIFIED BY 'password';
-#GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
-#FLUSH PRIVILEGES;
-#"
-
-
 # Получаем информацию о позиции бинлога
 MASTER_LOG_FILE=$(mysql -ujecka -h192.168.1.141 -p123qweASD!  -e "SHOW MASTER STATUS\G" | grep File | awk '{print $2}')
 MASTER_LOG_POS=$(mysql -ujecka -h192.168.1.141 -p123qweASD! -e "SHOW MASTER STATUS\G" | grep Position | awk '{print $2}')
@@ -98,7 +81,7 @@ systemctl stop mysql
 cp /tmp/mysqld_slave.cnf  /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
 
-mysql -u root -p <<EOF
+mysql -u  <<EOF
 CHANGE MASTER TO
 MASTER_HOST='192.168.1.141',
 MASTER_USER='replication',
