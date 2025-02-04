@@ -5,7 +5,7 @@ apt update && apt upgrade -y
 
 # Переменные для настройки сети
 IP_ADDRESS="192.168.1.22"   # Статический IP-адрес
-NETMASK="255.255.255.0"      # Маска подсети
+NETMASK="24"      # Маска подсети
 GATEWAY="192.168.0.1"        # Шлюз по умолчанию
 DNS_SERVERS="192.168.1.147 192.168.1.146" # DNS-серверы
 
@@ -41,19 +41,17 @@ apt-get install mysql-server git  -y
 
 # Запуск службы MySQL
 systemctl start mysql
-
-# Вход в консоль MySQL
-mysql -u root -p
+ 
 
 
 # Создание пользователя для репликации
+SQL_COMMANDS="
 CREATE USER 'replication_user'@'%' IDENTIFIED BY 'password';
 GRANT REPLICATION SLAVE ON *.* TO 'replication_user'@'%';
 FLUSH PRIVILEGES;
-
-# Выход из консоли MySQL
-exit
+"
+mysql -u root -e "${SQL_COMMANDS}" 
 
 systemctl stop mysql
-cp /tmp/mysqld_main.cnf -O /etc/mysql/mysql.conf.d/mysqld.cnf
+cp /tmp/mysqld_main.cnf  /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
