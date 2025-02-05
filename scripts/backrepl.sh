@@ -61,35 +61,30 @@ chmod 600 $INTERFACE_FILE
 
 
 ## Установка MySQL Server
-apt-get install mysql-server git  -y
+apt-get install mysql-server git apache2  php libapache2-mod-php php-mysql  -y
 
-# Запуск службы MySQL
-systemctl start mysql
-
-
-# Получаем информацию о позиции бинлога
-MASTER_LOG_FILE=$(mysql -ujecka -h192.168.1.141 -p123qweASD!  -e "SHOW MASTER STATUS\G" | grep File | awk '{print $2}')
-MASTER_LOG_POS=$(mysql -ujecka -h192.168.1.141 -p123qweASD! -e "SHOW MASTER STATUS\G" | grep Position | awk '{print $2}')
-
-# Сохраняем данные в файл
-echo "Master Log File: ${MASTER_LOG_FILE}" > /tmp/master_info.txt
-echo "Master Log Pos: ${MASTER_LOG_POS}" >> /tmp/master_info.txt
-
- 
 
 systemctl stop mysql
 cp /tmp/mysqld_slave.cnf  /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
 
-mysql -u  <<EOF
-CHANGE MASTER TO
-MASTER_HOST='192.168.1.141',
-MASTER_USER='replication',
-MASTER_PASSWORD='password',
-MASTER_LOG_FILE='$(cat /tmp/master_info.txt | head -n 1 | cut -d ":" -f 2)',
-MASTER_LOG_POS=$(cat /tmp/master_info.txt | tail -n 1 | cut -d ":" -f 2);
-START SLAVE;
+mysql -uroot  <<EOF
+STOP REPLICA;
+CHANGE REPLICATION SOURCE TO SOURCE_HOST='192.168.1.141', SOURCE_USER='replication', SOURCE_PASSWORD='password', SOURCE_AUTO_POSITION = 1, GET_SOURCE_PUBLIC_KEY = 1;
+START REPLICA;
 EOF
 
 # Проверка статуса репликации
-mysql -u root -p -e "SHOW SLAVE STATUS\G"
+mysql -uroot -e "SHOW SLAVE STATUS\G"
+
+
+cd /tmp
+wget https://wordpress.org/latest.tar.gz
+tar xzvf latest.tar.gz
+mv wordpress /var/www/html/
+cd /var/www/html/wordpress
+cp wp-config-sample.php wp-config.php
+
+
+
+

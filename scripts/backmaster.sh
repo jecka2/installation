@@ -73,8 +73,8 @@ CREATE USER 'jecka'@'%' IDENTIFIED BY '123qweASD!';
 GRANT ALL PRIVILEGES ON *.* TO 'jecka'@'%';
 CREATE USER 'replication'@'%' IDENTIFIED BY 'password';
 GRANT REPLICATION SLAVE ON *.* TO 'replication'@'%';
-FLUSH PRIVILEGES;
-
+CREATE DATABASE wp_database;
+GRANT ALL PRIVILEGES ON wp_database.* TO 'wp_user'@'%' IDENTIFIED BY '123qweASD!';
 FLUSH PRIVILEGES;
 "
 mysql -u root -e "${SQL_COMMANDS}" 
@@ -82,6 +82,13 @@ mysql -u root -e "${SQL_COMMANDS}"
 systemctl stop mysql
 cp /tmp/mysqld_main.cnf  /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
+
+cd /tmp
+wget https://wordpress.org/latest.tar.gz
+tar xzvf latest.tar.gz
+sudo mv wordpress /var/www/html/
+
+
 
 reboot now
 
