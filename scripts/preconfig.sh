@@ -9,10 +9,10 @@ echo "%$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/$USERNAME
 # Проверяем успешность операции
 if [ $? -eq 0 ]; then
     echo "Запрос пароля для sudo отключен для пользователя $USERNAME."
-    sleep 10
+    sleep 3
 else
     echo "Ошибка при попытке изменить настройки sudo для пользователя $USERNAME."
-    sleep 10 
+    sleep 3 
 fi
 
 apt update && apt upgrade -y

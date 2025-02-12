@@ -34,7 +34,7 @@ systemctl restart filebeat
 systemctl restart logstash 
 systemctl restart prometheus
  
-metricbeat setup --dashboards
+
 
 
 

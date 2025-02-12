@@ -80,7 +80,8 @@ for db_dir in "$BACKUP_DIR"/*; do
 done
 
 echo "Все базы данных восстановлены!"
-
+ 
+systemctl restart mysql 
 
 
 
@@ -98,10 +99,10 @@ sudo sed -i "/%$USERNAME ALL=(ALL) NOPASSWD: ALL/d" /etc/sudoers
 # Проверяем успешность операции
 if [ $? -eq 0 ]; then
     echo "Запрос пароля для sudo включен для пользователя $USERNAME."
-    sleep 10
+    sleep 5
 else
     echo "Ошибка при попытке восстановить настройки sudo для пользователя $USERNAME."
-    sleep 10 
+    sleep 5 
 fi
 
 
