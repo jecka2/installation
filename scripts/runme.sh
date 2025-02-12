@@ -73,7 +73,9 @@ configure ()
  ssh -t $user@$back_repl "sudo bash  /tmp/preconfig.sh backrepl"
 
  #Базовая установка ПО для сервера Мониторинга и Логирования и включения пользователя в необходимые группы 
- scp  $MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/          
+ scp  $MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/
+ echo "Положите пакет для ELK и  Grafana  в директорию /tmp/installatio/packages и нажмите любую клавшу"
+ read -s -n 1          
  scp -r $MAIN_DIR/packages/ $user@$log_mon:/tmp/
  ssh -t $user@$log_mon "sudo bash  /tmp/preconfig.sh mon_log"
 
