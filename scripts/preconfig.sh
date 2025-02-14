@@ -87,7 +87,7 @@ apt-get install mysql-server git apache2 prometheus-node-exporter  php libapache
 
 # Создание пользователя для репликации
 SQL_COMMANDS="
-CREATE USER 'replication'@'%' IDENTIFIED BY '$A$005$]qZXk[nVAcEbF>57fDdFJsJu4pG5AfDIDsl3/tP2U.1BoqAMjFN.2aKOt9';
+CREATE USER 'replication'@'192.168.1.142' IDENTIFIED BY '$A$005$]qZXk[nVAcEbF>57fDdFJsJu4pG5AfDIDsl3/tP2U.1BoqAMjFN.2aKOt9';
 GRANT REPLICATION SLAVE ON *.* TO 'replication'@'192.168.1.142';
 FLUSH PRIVILEGES;
 "
@@ -163,11 +163,14 @@ systemctl stop mysql
 cp /tmp/mysqld_slave.cnf  /etc/mysql/mysql.conf.d/mysqld.cnf
 systemctl start mysql
 
-mysql -uroot  <<EOF
+
+SQL_COMMANDS="
 STOP REPLICA;
-CHANGE REPLICATION SOURCE TO SOURCE_HOST='192.168.1.141', SOURCE_USER='replication', SOURCE_PASSWORD='$A$005$]qZXk[nVAcEbF>57fDdFJsJu4pG5AfDIDsl3/tP2U.1BoqAMjFN.2aKOt9', SOURCE_AUTO_POSITION = 1, GET_SOURCE_PUBLIC_KEY = 1;
+CHANGE REPLICATION SOURCE TO SOURCE_HOST='192.168.1.141', SOURCE_USER='replication', SOURCE_PASSWORD='password', SOURCE_AUTO_POSITION = 1, GET_SOURCE_PUBLIC_KEY = 1;
 START REPLICA;
-EOF
+"
+mysql -u root -e "${SQL_COMMANDS}"
+
 
 # Проверка статуса репликации
 mysql -uroot -e "SHOW SLAVE STATUS\G"
