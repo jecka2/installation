@@ -1,7 +1,7 @@
 #!/bin/bash 
 # Указываем имя файла, который ищем
 FILE_NAME="db_files.zip"
-MAIN_DIR="/tmp/installation"
+MAIN_DIR="pwd"
 
 # Указываем путь к папке, в которой ищем файл
 FOLDER_PATH="/tmp/backup"
@@ -56,27 +56,27 @@ configure ()
 
  # Установвка необходимого ПО подготовка и сетевая настройка
  #Базовая установка ПО и сетевая настройка для сервера фронт 
- scp  $MAIN_DIR/scripts/preconfig.sh $user@$front:/tmp/          
+ scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$front:/tmp/          
  ssh -t $user@$front "sudo bash  /tmp/preconfig.sh front"
 
  #Базовая установка ПО, подготовка для включеия репликации и сетевая настройка сервера Бэкэнд и мастер базы 
- scp  $MAIN_DIR/scripts/preconfig.sh $user@$back_master:/tmp/
- scp  $MAIN_DIR/configs/backmaster/mysqld_main.cnf $user@$back_master:/tmp/mysqld_main.cnf
- scp  $MAIN_DIR/configs/backmaster/000-default.conf $user@$back_master:/tmp/
+ scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$back_master:/tmp/
+ scp  ../$MAIN_DIR/configs/backmaster/mysqld_main.cnf $user@$back_master:/tmp/mysqld_main.cnf
+ scp  ../$MAIN_DIR/configs/backmaster/000-default.conf $user@$back_master:/tmp/
  ssh -t $user@$back_master "sudo bash  /tmp/preconfig.sh backmaster"
 
 
  #Базовая установка ПО, подготовка для  включения репликации и сетевая настройка для Бэкэнд2 и сервера репликации
- scp  $MAIN_DIR/scripts/preconfig.sh $user@$back_repl:/tmp/
- scp  $MAIN_DIR/configs/backrepl/mysqld_slave.cnf $user@$back_repl:/tmp/mysqld_slave.cnf
- scp  $MAIN_DIR/configs/backrepl/000-default.conf $user@$back_repl:/tmp/
+ scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$back_repl:/tmp/
+ scp  ../$MAIN_DIR/configs/backrepl/mysqld_slave.cnf $user@$back_repl:/tmp/mysqld_slave.cnf
+ scp  ../$MAIN_DIR/configs/backrepl/000-default.conf $user@$back_repl:/tmp/
  ssh -t $user@$back_repl "sudo bash  /tmp/preconfig.sh backrepl"
 
  #Базовая установка ПО для сервера Мониторинга и Логирования и включения пользователя в необходимые группы 
- scp  $MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/
+ scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/
  echo "Положите пакет для ELK и  Grafana  в директорию /tmp/installatio/packages и нажмите любую клавшу"
  read -s -n 1          
- scp -r $MAIN_DIR/packages/ $user@$log_mon:/tmp/
+ scp -r ../$MAIN_DIR/packages/ $user@$log_mon:/tmp/
  ssh -t $user@$log_mon "sudo bash  /tmp/preconfig.sh mon_log"
 
 }
@@ -101,14 +101,14 @@ read  user
 
  # Восстановление конфигурации для серверов
  #Запуск восстановления конфигурации на сервере фронт
- scp  $MAIN_DIR/scripts/front_config.sh $user@$front:/tmp/
- scp  $MAIN_DIR/configs/front/wordpress $user@$front:/tmp/
+ scp  ../$MAIN_DIR/scripts/front_config.sh $user@$front:/tmp/
+ scp  ../$MAIN_DIR/configs/front/wordpress $user@$front:/tmp/
  ssh -t $user@$front "sudo bash  /tmp/front_config.sh"
 
 
  #Запуск восстановления конфигурации для сервера Бэкэнд и Мастер базы
- scp  $MAIN_DIR/scripts/backmaster_config.sh $user@$back_master:/tmp/
- scp  $MAIN_DIR /configs/backmaster/000-default.conf $user@$back_master:/tmp/000-default.conf
+ scp  ../$MAIN_DIR/scripts/backmaster_config.sh $user@$back_master:/tmp/
+ scp  ../$MAIN_DIR /configs/backmaster/000-default.conf $user@$back_master:/tmp/000-default.conf
  echo "Положите файл резервной копии бд и сайта в /tmp/backup  архив должен иметь название db_files.zip  и нажмите любую клавишу для продолжения"
  read -s -n 1
 
@@ -128,15 +128,15 @@ read  user
 
 
  #Запуск восстановления конфигурации для сервера Бэкэнд2 и базы репликации
- scp $MAIN_DIR/scripts/backrepl_config.sh $user@$back_repl:/tmp/
- scp $MAIN_DIR/configs/backrepl/000-default.conf $user@$back_repl:/tmp/
- scp $MAIN_DIR/scripts/backup.sh $user@$back_repl:/tmp/
+ scp ../$MAIN_DIR/scripts/backrepl_config.sh $user@$back_repl:/tmp/
+ scp ../$MAIN_DIR/configs/backrepl/000-default.conf $user@$back_repl:/tmp/
+ scp ../$MAIN_DIR/scripts/backup.sh $user@$back_repl:/tmp/
  scp /tmp/backup/$FILE_NAME $user@$back_repl:/tmp/ 
  ssh -t $user@$back_repl "sudo bash  /tmp/backrepl_config.sh"
 
  #Запуск восстановления конфигурации для сервера Логирования и Мониторинга
- scp  $MAIN_DIR/scripts/log_mon_config.sh $user@$log_mon:/tmp/
- scp -r $MAIN_DIR/configs/log_mon/  $user@$log_mon:/tmp/
+ scp  ../$MAIN_DIR/scripts/log_mon_config.sh $user@$log_mon:/tmp/
+ scp -r ../$MAIN_DIR/configs/log_mon/  $user@$log_mon:/tmp/
  ssh -t $user@$log_mon "sudo bash  /tmp/log_mon_config.sh"
 
 }
