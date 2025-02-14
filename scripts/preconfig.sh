@@ -87,7 +87,7 @@ apt-get install mysql-server git apache2 prometheus-node-exporter  php libapache
 
 # Создание пользователя для репликации
 SQL_COMMANDS="
-CREATE USER 'replication'@'192.168.1.142' IDENTIFIED BY '$A$005$]qZXk[nVAcEbF>57fDdFJsJu4pG5AfDIDsl3/tP2U.1BoqAMjFN.2aKOt9';
+CREATE USER 'replication'@'192.168.1.142' IDENTIFIED BY 'password';
 GRANT REPLICATION SLAVE ON *.* TO 'replication'@'192.168.1.142';
 FLUSH PRIVILEGES;
 "
