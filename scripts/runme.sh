@@ -1,7 +1,7 @@
 #!/bin/bash 
 # Указываем имя файла, который ищем
 FILE_NAME="db_files.zip"
-MAIN_DIR="pwd"
+MAIN_DIR=$(dirname "$PWD")
 
 # Указываем путь к папке, в которой ищем файл
 FOLDER_PATH="/tmp/backup"
@@ -74,7 +74,7 @@ configure ()
 
  #Базовая установка ПО для сервера Мониторинга и Логирования и включения пользователя в необходимые группы 
  scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/
- echo "Положите пакет для ELK и  Grafana  в директорию /tmp/installatio/packages и нажмите любую клавшу"
+ echo "Положите пакет для ELK и  Grafana  в директорию '../$MAIN_DIR/installatio/packages' и нажмите любую клавшу"
  read -s -n 1          
  scp -r ../$MAIN_DIR/packages/ $user@$log_mon:/tmp/
  ssh -t $user@$log_mon "sudo bash  /tmp/preconfig.sh mon_log"
