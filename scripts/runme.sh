@@ -74,7 +74,7 @@ configure ()
 
  #Базовая установка ПО для сервера Мониторинга и Логирования и включения пользователя в необходимые группы 
  scp  ../$MAIN_DIR/scripts/preconfig.sh $user@$log_mon:/tmp/
- echo "Положите пакет для ELK и  Grafana  в директорию '../$MAIN_DIR/installatio/packages' и нажмите любую клавшу"
+ echo "Положите пакет для ELK и  Grafana  в директорию $MAIN_DIR/packages и нажмите любую клавшу"
  read -s -n 1          
  scp -r ../$MAIN_DIR/packages/ $user@$log_mon:/tmp/
  ssh -t $user@$log_mon "sudo bash  /tmp/preconfig.sh mon_log"
