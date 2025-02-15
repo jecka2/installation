@@ -82,7 +82,7 @@ EOF
 chmod 600 $INTERFACE_FILE
 
 ## Установка MySQL Server
-apt-get install mysql-server git apache2 prometheus-node-exporter  php libapache2-mod-php php-mysql zip -y
+apt-get install mysql-server git apache2 prometheus-node-exporter rsyslog rsyslog-gnutls php libapache2-mod-php php-mysql zip -y
 
 
 # Создание пользователя для репликации
@@ -109,7 +109,13 @@ chown -R www-data:www-data /var/www/html/wordpress
 
 cp /tmp/000-default.conf /etc/apache2/sites-available/
 
+echo "module(load="imuxsock") # local message reception" >> /etc/rsyslog.conf
+echo "module(load="imklog")   # kernel message reception" >> /etc/rsyslog.conf
 
+# Send logs to Logstash over TCP with TLS encryption
+echo "$ActionSendStreamDriverPermittedPeer 192.168.1.144 # замените на ваше доменное имя или IP-адрес сервера Logstash" >> /etc/rsyslog.conf
+
+echo "*.* 192.168.1.144:5400 # замените на адрес и порт вашего Logstash" >>/etc/rsyslog.conf
 
 reboot now
   
@@ -156,7 +162,7 @@ chmod 600 $INTERFACE_FILE
 
 
 ## Установка MySQL Server
-apt-get install mysql-server git apache2 prometheus-node-exporter  php libapache2-mod-php php-mysql zip  -y
+apt-get install mysql-server git apache2 prometheus-node-exporter  rsyslog rsyslog-gnutls php libapache2-mod-php php-mysql zip  -y
 
 
 systemctl stop mysql
@@ -281,7 +287,7 @@ EOF
 chmod 600 $INTERFACE_FILE
 
 
-apt install nginx prometheus-node-exporter -y
+apt install nginx prometheus-node-exporter rsyslog rsyslog-gnutls -y
 
 rm /etc/nginx/sites-avalible/default
 cp /tmp/wordpress /etc/nginx/sites-avalible/

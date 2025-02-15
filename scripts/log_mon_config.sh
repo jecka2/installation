@@ -18,6 +18,7 @@ systemctl enable --now kibana.service
 
 cp $DIR/logstash.yml /etc/logstash/
 cp $DIR/logstash-nginx-es.conf /etc/logstash/conf.d/
+cp $DIR/input-syslog.conf /etc/logstash/conf.d/
 systemctl enable --now logstash.service
 
 
