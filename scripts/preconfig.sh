@@ -15,7 +15,7 @@ else
     sleep 3 
 fi
 
-apt update && apt upgrade -y
+apt update && apt upgrade -y 
 
 
 # Директория, в которой находятся файлы

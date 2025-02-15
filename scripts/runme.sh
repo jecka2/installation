@@ -1,17 +1,10 @@
 #!/bin/bash 
 # Указываем имя файла, который ищем
 FILE_NAME="db_files.zip"
-MAIN_DIR=$(dirname "$PWD")
+MAIN_DIR=$("$PWD")
 
 # Указываем путь к папке, в которой ищем файл
 FOLDER_PATH="/tmp/backup"
-
-
-# Разворачивание из Гитхаб конфигов,скриптов
-cd /tmp
-git clone https://github.com/jecka2/installation.git
-
-
 
 # Функция для очистки экрана
 clear_screen() {
@@ -108,7 +101,7 @@ read  user
 
  #Запуск восстановления конфигурации для сервера Бэкэнд и Мастер базы
  scp  ../$MAIN_DIR/scripts/backmaster_config.sh $user@$back_master:/tmp/
- scp  ../$MAIN_DIR /configs/backmaster/000-default.conf $user@$back_master:/tmp/000-default.conf
+ scp  ../$MAIN_DIR/configs/backmaster/000-default.conf $user@$back_master:/tmp/000-default.conf
  echo "Положите файл резервной копии бд и сайта в /tmp/backup  архив должен иметь название db_files.zip  и нажмите любую клавишу для продолжения"
  read -s -n 1
 

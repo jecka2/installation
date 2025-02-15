@@ -53,6 +53,6 @@ rsync -avz /var/www/html/${SITE_DIR}/ ${BACKUP_DIR}/${SITE_DIR}
 
 mkdir ~/backup
 cd /tmp    
-zip -r ~/backup/db_files.zip $BACKUP_DIR
+zip -r ~/backup/db_files.zip_$TIMESTAMP $BACKUP_DIR
 
 echo "Полный архив расположен в ~/backup"
