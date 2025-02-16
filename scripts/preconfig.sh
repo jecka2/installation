@@ -1,7 +1,8 @@
 #!/bin/bash
 
 
-USERNAME=$(whoami)
+USERNAME=($2)
+echo $2
 
 # Редактируем файл sudoers
 echo "%$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/$USERNAME
@@ -9,10 +10,10 @@ echo "%$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/$USERNAME
 # Проверяем успешность операции
 if [ $? -eq 0 ]; then
     echo "Запрос пароля для sudo отключен для пользователя $USERNAME."
-    sleep 3
+    sleep 1
 else
     echo "Ошибка при попытке изменить настройки sudo для пользователя $USERNAME."
-    sleep 3 
+    sleep 1 
 fi
 
 apt update && apt upgrade -y 
@@ -40,6 +41,10 @@ for file in "${files[@]}"; do
 done
 
 echo $1
+touch /var/log/configure_error.log
+touch /var/log/configure_log.log
+exec 2>/var/log/configure_error.log
+
 
 
 if [[ "$1" == "backmaster" ]]; 
@@ -234,7 +239,7 @@ chmod 600 $INTERFACE_FILE
 #Установка софта для mon_log
 apt install musl  prometheus   -y
 cd /tmp/packages
-sudo dpkg -i *.deb
+dpkg -i *.deb
 
 USERNAME=$(whoami)
 
@@ -293,6 +298,9 @@ rm /etc/nginx/sites-avalible/default
 cp /tmp/wordpress /etc/nginx/sites-avalible/
 ln -s /etc/nginx/sites-available/wordpress  /etc/nginx/sites-enabled/wordpress
 
+dpkg -i /tmp/filebeat-*.deb
+
 sudo reboot now
  fi  
  
+
