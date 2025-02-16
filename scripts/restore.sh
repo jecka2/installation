@@ -2,7 +2,6 @@
 
 # Настройки подключения к базе данных
 MYSQL_USER="root"
-MYSQL_PASS="password"
 BACKUP_DIR="/tmp/backup/BASE"
 
 # Указать папку с архивом
