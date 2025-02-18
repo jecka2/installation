@@ -5,7 +5,7 @@ USERNAME=($2)
 echo $2
 
 # Редактируем файл sudoers
-echo "%$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/$USERNAME
+echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" | sudo tee -a /etc/sudoers.d/$USERNAME
 
 # Проверяем успешность операции
 if [ $? -eq 0 ]; then
