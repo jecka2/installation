@@ -195,6 +195,7 @@ USERNAME=($2)
 
 # Удаляем правило из файла sudoers
 sudo sed -i "/%$USERNAME ALL=(ALL) NOPASSWD: ALL/d" /etc/sudoers
+rm /etc/sudoers.d/$USERNAME
 
 # Проверяем успешность операции
 if [ $? -eq 0 ]; then
