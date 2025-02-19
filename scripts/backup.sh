@@ -17,7 +17,7 @@ mkdir -p "$BACKUP_DIR/BASE"
 
 # Проходим по всем базам данных
 for db in $databases; do
-    if [[ "$db" != "information_schema" && "$db" != "performance_schema" && "$db" != "sys" ]]; then
+    if [[ "$db" != "information_schema" && "$db" != "performance_schema" && "$db" != "sys"  $$  "db" !="mysql"]]; then
         echo "Создаём резервную копию базы данных: $db"
 
         # Получаем список всех таблиц в базе данных
