@@ -86,16 +86,27 @@ elif [[ "$1" == "backmaster" ]];
         	if [ -f "$binlog_info_file" ]; then
             				master_log_file=$(grep "Master_Log_File:" "$binlog_info_file" | cut -d ':' -f2)
             				exec_master_log_pos=$(grep "Exec_Master_Log_Pos:" "$binlog_info_file" | cut -d ':' -f2)
-
+        
             				# Применение позиции бинарного лога для продолжения репликации
             				mysql -u "$MYSQL_USER"  -e "STOP SLAVE; CHANGE MASTER TO MASTER_LOG_FILE='$master_log_file', MASTER_LOG_POS=$exec_master_log_pos; START SLAVE;"
         	else
-            				echo "Файл binlog_info.txt отсутствует в папке $db_dir. Позиция бинарного лога не применяется."
+           				echo "Файл binlog_info.txt отсутствует в папке $db_dir. Позиция бинарного лога не применяется."
         	fi
   	  fi
 	done
 
 	echo "Все базы данных восстановлены!"
+
+
+
+SQL_COMMANDS="
+CREATE USER 'wp_user'@'%' IDENTIFIED WITH 'caching_sha2_password' BY '123qweASD!'; 
+GRANT ALL PRIVILEGES ON wp_data.* TO 'wp_user'@'%';
+FLUSH PRIVILEGES;
+"
+mysql -u root -e "${SQL_COMMANDS}"
+
+
 
 	systemctl restart mysql
 
@@ -109,6 +120,9 @@ elif [[ "$1" == "backrepl" ]];
 
 
 	SCRIPT_PATH="~/backup.sh"
+	# Настройки подключения к базе данных
+        MYSQL_USER="root"
+        BACKUP_DIR="/tmp/backup/BASE"
 
 
 	rm -R /var/www/html/wordpress
@@ -120,7 +134,9 @@ elif [[ "$1" == "backrepl" ]];
 	unzip -d /  /tmp/db_files.zip
 	sudo cp -R  /tmp/backup/wordpress /var/www/html/
 	sudo chown -R  www-data:www-data /var/www/html/wordpress
-	cp /tmp/backup.sh ~/
+	
+
+         cp /tmp/backup.sh ~/
 
 	#Создания задания для резервного копирования баз данных и файлов
 	# Путь к вашему скрипту
